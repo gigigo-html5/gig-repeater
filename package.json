@@ -1,0 +1,34 @@
+{
+  "name": "gig-repeater",
+  "version": "0.0.1",
+  "description": "Webcomponents to clone elements of form",
+  "main": "gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "./node_modules/.bin/grunt release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gigigo-html5/gig-repeater.git"
+  },
+  "author": "Pedro José Peña Jerez <pedro.jose@gigigo.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gigigo-html5/gig-repeater/issues"
+  },
+  "devDependencies": {
+    "bower": "*",
+    "grunt": ">=0.4.0",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-conventional-changelog": "0.0.12",
+    "grunt-release": "~0.3.3",
+    "grunt-vulcanize": "^1.0.0",
+    "grunt-cli": "^0.1.13",
+    "karma": "~0.8.0"
+  },
+  "homepage": "https://github.com/gigigo-html5/gig-repeater",
+  "dependencies": {
+
+  }
+}

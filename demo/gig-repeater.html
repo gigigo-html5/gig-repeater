@@ -1,0 +1,128 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/gig-button/gig-button.html">
+<link rel="import" href="../bower_components/gig-html/gig-html.html">
+
+<dom-module id="gig-repeater">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Roboto, sans-serif;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.05);
+            position: relative;
+        }
+
+        .panel-title {
+            padding: 20px 30px;
+            font-size: 18px;
+            color: #37474f;
+            display: block;
+            text-shadow: rgba(0,0,0,.15) 0 0 1px;
+        }
+
+        .panel-actions {
+            position:absolute;
+            top: 50%;
+            right: 30px;
+            z-index: 1;
+            margin: auto;
+            transform: translate(0,-50%);
+            -webkit-transform: translate(0,-50%);
+            -o-transform: translate(0,-50%);
+            -ms-transform: translate(0,-50%);
+        }
+
+        .panel-body {
+            padding: 30px 30px;
+            padding-top: 0;
+            position:relative;
+        }
+
+        .panel-heading {
+            position: relative;
+        }
+
+    </style>
+
+    <template id="template">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">[[title]]</h3>
+                <div class="panel-actions">
+                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
+                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up"></gig-button>
+                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down"></gig-button>
+                </div>
+
+            </div>
+            <div class="panel-body" id="clone">
+                <content></content>
+            </div>
+        </div>
+
+        <template is="dom-repeat" items="{{cloneElements}}">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                    <div class="panel-actions">
+                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
+                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up"></gig-button>
+                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down"></gig-button>
+                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-trash" on-click="deleteHandler"></gig-button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <gig-html html="{{item.innerHTML}}"></gig-html>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <script>
+        (function() {
+            Polymer({
+                is: 'gig-repeater',
+                ready: function() {
+                    this.clone = this.$.clone.cloneNode(true);
+
+                },
+                generateClone: function(index) {
+
+                    var html = this.clone.cloneNode(true);
+                    for (var i = 0; i < html.children.length; i++) {
+                        var children = html.children[i];
+
+                        if (children.name) {
+                            children.name = children.name + index;
+                        }
+                    }
+
+                    return html;
+                },
+                cloneHandler: function() {
+                    var index = this.cloneElements.length;
+                    this.push('cloneElements', this.generateClone(index));
+
+                },
+                deleteHandler: function(e) {
+                    console.log(e);
+                },
+                properties: {
+                    cloneElements: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    }
+                }
+            })
+        })();
+    </script>
+
+</dom-module>

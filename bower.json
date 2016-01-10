@@ -1,0 +1,21 @@
+{
+  "name": "gig-repeater",
+  "version": "0.0.1",
+  "homepage": "https://github.com/gigigo-html5/gig-repeater",
+  "authors": [
+    "Pedro Peña <pedro.jose@gigigo.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~1.2.0",
+    "gig-button": "~0.0.6",
+    "gig-html": "~0.0.1"
+  }
+}
