@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/gig-button/gig-button.html">
 <link rel="import" href="../bower_components/gig-html/gig-html.html">
+<script src="../bower_components/Sortable/Sortable.js"></script>
 
 <dom-module id="gig-repeater">
 
@@ -11,11 +12,16 @@
             font-family: Roboto, sans-serif;
         }
 
+        ::content .clone-content {
+            display: none
+        }
+
         .panel {
             background: white;
             border-radius: 4px;
             box-shadow: 0 1px 1px rgba(0,0,0,.05);
             position: relative;
+            cursor: move;
         }
 
         .panel-title {
@@ -48,58 +54,78 @@
             position: relative;
         }
 
+        .sortable-ghost {
+            display: block;
+            background-color: #f3f7f9;
+            border: 1px dashed #e4eaec;
+            margin-top: 20px;
+
+        }
+
+        .sortable-ghost > * {
+            visibility: hidden;
+        }
+
     </style>
 
     <template id="template">
-        <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">[[title]]</h3>
-                <div class="panel-actions">
-                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
-                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up"></gig-button>
-                    <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down"></gig-button>
-                </div>
 
-            </div>
-            <div class="panel-body" id="clone">
-                <content></content>
-            </div>
-        </div>
+        <content id="c" select=".clone-content"></content>
 
-        <template is="dom-repeat" items="{{cloneElements}}">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                    <div class="panel-actions">
-                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
-                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up"></gig-button>
-                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down"></gig-button>
-                        <gig-button class="btn-default btn-icon btn-pure" icon="fa-trash" on-click="deleteHandler"></gig-button>
+        <div class="panel-list" id="list">
+            <template is="dom-repeat" items="{{cloneElements}}">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                        <div class="panel-actions">
+                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
+                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up" on-click="sortUpHandler"></gig-button>
+                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down" on-click="sortDownHandler"></gig-button>
+                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-trash" on-click="deleteHandler"></gig-button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <gig-html html="{{item.innerHTML}}"></gig-html>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <gig-html html="{{item.innerHTML}}"></gig-html>
-                </div>
-            </div>
-        </template>
+            </template>
+        </div>
+
     </template>
 
     <script>
         (function() {
+
+            Array.prototype.move = function (from, to) {
+                this.splice(to, 0, this.splice(from, 1)[0]);
+            };
+
             Polymer({
                 is: 'gig-repeater',
                 ready: function() {
-                    this.clone = this.$.clone.cloneNode(true);
+                    var self = this;
+                    this.cloneElements = Polymer.dom(this.$.c).getDistributedNodes();
+
+                    this.sortable = new Sortable(this.$.list, {
+                        draggable: '.panel',
+                        ghostClass: 'sortable-ghost',
+                        onEnd: function (e) {
+                            self.updateIndex();
+                        }
+                    })
 
                 },
                 generateClone: function(index) {
+                    index = index + 1;
+                    var html = this.cloneElements[0].cloneNode(true);
 
-                    var html = this.clone.cloneNode(true);
                     for (var i = 0; i < html.children.length; i++) {
                         var children = html.children[i];
 
                         if (children.name) {
-                            children.name = children.name + index;
+                            this.nameRegex = new RegExp(this.nameRegex);
+                            children.name = children.name.replace(this.nameRegex,'$1'+index+'$3');
+                            children.value = null;
                         }
                     }
 
@@ -108,10 +134,50 @@
                 cloneHandler: function() {
                     var index = this.cloneElements.length;
                     this.push('cloneElements', this.generateClone(index));
-
+                    this.updateIndex();
                 },
                 deleteHandler: function(e) {
-                    console.log(e);
+                    this.splice('cloneElements', e.model.index, 1);
+                    this.updateIndex();
+                },
+                updateIndex: function() {
+                    for (var i = 0; i < this.cloneElements.length; i++) {
+                        var html = this.cloneElements[i].cloneNode(true);
+
+
+                        for (var x = 0; x < html.children.length; x++) {
+                            var children = html.children[x];
+
+                            if (children.name) {
+                                this.nameRegex = new RegExp(this.nameRegex);
+                                children.name = children.name.replace(this.nameRegex,'$1'+i+'$3');
+                            }
+                        }
+
+                        this.set('cloneElements.'+i, html);
+                    }
+                },
+                sortUpHandler: function(e) {
+                    var index = e.model.index - 1;
+                    this.cloneElements.move(e.model.index, index);
+                    this.set('cloneElements', this.cloneElements);
+                },
+                sortDownHandler: function(e) {
+                    var index = e.model.index + 1;
+                    this.cloneElements.move(e.model.index, index);
+                    this.notifyPath('cloneElements', this.cloneElements);
+
+                    var array = [];
+
+                    for (var i = 0; i < this.cloneElements.length; i++) {
+                        for (var x = 0; x < this.cloneElements[i].children.length; x++) {
+
+                        }
+
+                        array.push(this.cloneElements[i]);
+                    }
+
+                    this.set('cloneElements', array);
                 },
                 properties: {
                     cloneElements: {
@@ -119,6 +185,9 @@
                         value: function() {
                             return [];
                         }
+                    },
+                    nameRegex: {
+                        type: String
                     }
                 }
             })

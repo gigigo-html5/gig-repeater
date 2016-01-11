@@ -16,6 +16,7 @@
   "dependencies": {
     "polymer": "~1.2.0",
     "gig-button": "~0.0.6",
-    "gig-html": "~0.0.1"
+    "gig-html": "~0.0.1",
+    "Sortable": "~1.4.2"
   }
 }
