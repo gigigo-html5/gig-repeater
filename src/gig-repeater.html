@@ -1,7 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../gig-button/gig-button.html">
 <link rel="import" href="gig-repeat-html.html">
-<script src="../Sortable/Sortable.js"></script>
 
 <dom-module id="gig-repeater">
 
@@ -106,27 +105,17 @@
                     var self = this;
                     this.cloneElements = this.getInitialContent();
 
-                    this.sortable = new Sortable(this.$.list, {
-                        draggable: '.panel',
-                        ghostClass: 'sortable-ghost',
-                        onSort: function (e) {
-                            self.cloneElements.move(e.oldIndex, e.newIndex);
-                            self.updateIndex();
-                            self.sortValue = !self.sortValue;
-                        }
-                    })
-
                 },
                 getInitialContent: function() {
                     var items = Polymer.dom(this.$.c).getDistributedNodes();
                     var array = []
 
                     for (var i = 0; i < items.length; i++) {
-                        var object = items[i];
+                        var object = items[i].cloneNode(true);
                         object.index = i;
                         array.push(object);
 
-                        var elements = Polymer.dom(object).querySelectorAll('[name]');
+                        var elements = Polymer.dom(items[i]).querySelectorAll('[name]');
 
                         for (var x = 0; x < elements.length; x++) {
                             var elem = elements[x];
