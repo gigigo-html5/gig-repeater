@@ -8,6 +8,7 @@
     <title>Gig Component fieldMap Demo</title>
     <link rel="import" href="/demo/gig-repeater.html">
     <link rel="import" href="/bower_components/gig-input/gig-input.html">
+    <link rel="import" href="/bower_components/gig-textarea/gig-textarea.html">
 
     <style is="custom-style">
         body {
@@ -26,8 +27,18 @@
     <div class="field">
         <gig-repeater name-regex="(elements\[[\w\d_-]+\]\[childs\]\[)(\d+)(\]\[[\w\d_-]+\]\[\w\w\])">
             <div class="clone-content">
-                <p>Prueba</p>
-                <gig-input name="elements[videoList][childs][0][youtubeId][es]" value="prueba"></gig-input>
+                <div class="field">
+                    <p>Prueba</p>
+                    <gig-input name="elements[videoList][childs][0][youtubeId][es]" value="prueba"></gig-input>
+                </div>
+                <div class="field">
+                    <p>Prueba</p>
+                    <gig-textarea editor="true" name="elements[videoList][childs][0][textarea][es]" value="<b>prueba2</b>"></gig-textarea>
+                </div>
+                <div class="field">
+                    <p>Prueba</p>
+                    <gig-textarea  name="elements[videoList][childs][0][textarea2][es]" value="<b>prueba2</b>"></gig-textarea>
+                </div>
             </div>
         </gig-repeater>
 

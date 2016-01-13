@@ -17,6 +17,7 @@
     "polymer": "~1.2.0",
     "gig-button": "~0.0.6",
     "gig-html": "~0.0.1",
-    "Sortable": "~1.4.2"
+    "Sortable": "~1.4.2",
+    "mark-down": "robdodson/mark-down#~1.0.0"
   }
 }
