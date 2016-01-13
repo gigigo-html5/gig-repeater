@@ -5,7 +5,6 @@
  @author Pedro José Peña Jerez <pedro.jose@gigigo.com>
  @license MIT License, http://www.opensource.org/licenses/MIT
  -->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../gig-button/gig-button.html">
 <link rel="import" href="gig-repeat-html.html">
@@ -93,7 +92,6 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                    {{item.index}}
                         <gig-repeat-html html="{{item.innerHTML}}" index="{{item.index}}" name-regex="{{nameRegex}}"></gig-repeat-html>
                     </div>
                 </div>
@@ -134,6 +132,14 @@
                         var object = items[i];
                         object.index = i;
                         array.push(object);
+
+                        var elements = Polymer.dom(object).querySelectorAll('[name]');
+
+                        for (var x = 0; x < elements.length; x++) {
+                            var elem = elements[x];
+                            elem.setAttribute('disabled',true);
+                        }
+
                     }
 
                     return array;
