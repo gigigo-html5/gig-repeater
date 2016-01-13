@@ -15,21 +15,16 @@
             this.changeIndex()
         },
         changeIndex: function() {
+            var elements = this.querySelectorAll('[name]');
 
-            if (this.index) {
-                var elements = this.querySelectorAll('[name]');
+            for (var i = 0; i < elements.length; i++) {
+                var children = elements[i];
 
-                for (var i = 0; i < elements.length; i++) {
-                    var children = elements[i];
+                this.nameRegex = new RegExp(this.nameRegex);
+                children.name = children.name.replace(this.nameRegex,'$1'+this.index+'$3');
 
-                    if (children.name) {
-                        this.nameRegex = new RegExp(this.nameRegex);
-                        children.name = children.name.replace(this.nameRegex,'$1'+this.index+'$3');
-                    }
-
-                    if (children.editor) {
-                        children.editorReady();
-                    }
+                if (children.editor) {
+                    children.editorReady();
                 }
             }
 
@@ -40,7 +35,9 @@
             },
             index: {
                 type: Number,
+                value: 0,
                 reflectToAttribute: true,
+                notify: true,
                 observer: 'changeIndex'
             }
         }
