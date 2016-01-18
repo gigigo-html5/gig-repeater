@@ -71,7 +71,7 @@
         <content id="c" select=".clone-content"></content>
 
         <div class="panel-list" id="list">
-            <template is="dom-repeat" items="{{cloneElements}}" sort="{{_sort(sortVal)}}">
+            <template is="dom-repeat" items="{{cloneElements}}" sort="{{_sort(sortVal)}}" on-dom-change="updateClone">
                 <div class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title"></h3>
@@ -111,6 +111,7 @@
 
                     for (var i = 0; i < items.length; i++) {
                         var object = items[i].cloneNode(true);
+                        items[i].remove();
                         object.index = i;
                         array.push(object);
 
@@ -145,11 +146,16 @@
                     }
                     html.index = index;
 
+
                     return html;
+                },
+                updateClone: function() {
+                    this.fire('clone', this.cloneElements[this.cloneElements.length -1]);
                 },
                 cloneHandler: function() {
                     var index = this.cloneElements.length;
                     this.push('cloneElements', this.generateClone(index));
+
                 },
                 deleteHandler: function(e) {
                     this.splice('cloneElements', e.model.index, 1);

@@ -1,6 +1,6 @@
 {
   "name": "gig-repeater",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Webcomponents to clone elements of form",
   "main": "gruntfile.js",
   "scripts": {
