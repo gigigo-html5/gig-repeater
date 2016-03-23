@@ -1,5 +1,5 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../gig-button/gig-button.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/gig-button/gig-button.html">
 <link rel="import" href="gig-repeat-html.html">
 
 <dom-module id="gig-repeater">
@@ -94,10 +94,6 @@
     <script>
         (function() {
 
-            Array.prototype.move = function (from, to) {
-                this.splice(to, 0, this.splice(from, 1)[0]);
-            };
-
             Polymer({
                 is: 'gig-repeater',
                 ready: function() {
@@ -178,13 +174,7 @@
                     if (index >= 0) {
                         this.set('cloneElements.'+currentIndex+'.index', index);
                         this.set('cloneElements.'+index+'.index', currentIndex);
-
-                        var item = this.$.list.children[currentIndex];
-                        var prevItem = this.$.list.children[currentIndex].previousElementSibling;
-
-                        Polymer.dom(this.$.list).insertBefore(item, prevItem);
-
-                        this.cloneElements.move(currentIndex, index);
+                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
                     }
                 },
                 sortDownHandler: function(e) {
@@ -195,12 +185,7 @@
                         this.set('cloneElements.'+currentIndex+'.index', index);
                         this.set('cloneElements.'+index+'.index', currentIndex);
 
-                        var item = this.$.list.children[currentIndex];
-                        var nextItem = this.$.list.children[currentIndex].nextElementSibling;
-
-                        Polymer.dom(this.$.list).insertBefore(item, nextItem.nextElementSibling);
-
-                        this.cloneElements.move(currentIndex, index);
+                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
                     }
 
                 },

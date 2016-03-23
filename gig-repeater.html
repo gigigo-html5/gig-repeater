@@ -1,11 +1,11 @@
 <!--
  Webcomponents to clone elements of form
- @version v0.0.2 - 2016-01-13
+ @version v0.0.3 - 2016-03-23
  @link https://github.com/gigigo-html5/gig-repeater
  @author Pedro José Peña Jerez <pedro.jose@gigigo.com>
  @license MIT License, http://www.opensource.org/licenses/MIT
- -->
 
+ -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../gig-button/gig-button.html">
 <link rel="import" href="gig-repeat-html.html">
@@ -102,10 +102,6 @@
     <script>
         (function() {
 
-            Array.prototype.move = function (from, to) {
-                this.splice(to, 0, this.splice(from, 1)[0]);
-            };
-
             Polymer({
                 is: 'gig-repeater',
                 ready: function() {
@@ -186,13 +182,7 @@
                     if (index >= 0) {
                         this.set('cloneElements.'+currentIndex+'.index', index);
                         this.set('cloneElements.'+index+'.index', currentIndex);
-
-                        var item = this.$.list.children[currentIndex];
-                        var prevItem = this.$.list.children[currentIndex].previousElementSibling;
-
-                        Polymer.dom(this.$.list).insertBefore(item, prevItem);
-
-                        this.cloneElements.move(currentIndex, index);
+                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
                     }
                 },
                 sortDownHandler: function(e) {
@@ -203,12 +193,7 @@
                         this.set('cloneElements.'+currentIndex+'.index', index);
                         this.set('cloneElements.'+index+'.index', currentIndex);
 
-                        var item = this.$.list.children[currentIndex];
-                        var nextItem = this.$.list.children[currentIndex].nextElementSibling;
-
-                        Polymer.dom(this.$.list).insertBefore(item, nextItem.nextElementSibling);
-
-                        this.cloneElements.move(currentIndex, index);
+                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
                     }
 
                 },
