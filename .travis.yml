@@ -1,0 +1,15 @@
+language: node_js
+sudo: required
+node_js:
+  - '4'
+before_script:
+  - npm install -g bower polylint web-component-tester
+addons:
+  firefox: '46.0'
+  apt:
+    sources:
+      sources:
+        - google-chrome
+      packages:
+        - google-chrome-stable
+dist: trusty
