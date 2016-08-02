@@ -1,6 +1,6 @@
 {
   "name": "gig-repeater",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Webcomponents to clone elements of form",
   "main": "gulpfile.js",
   "scripts": {
@@ -37,7 +37,5 @@
     "polylint": "^2.10.1"
   },
   "homepage": "https://github.com/gigigo-html5/gig-repeater",
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }
