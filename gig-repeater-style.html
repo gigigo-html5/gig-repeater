@@ -1,0 +1,71 @@
+<!--
+ Webcomponents to clone elements of form
+ @version v0.0.3 - 2016-08-02
+ @link https://github.com/gigigo-html5/gig-repeater
+ @author Pedro José Peña Jerez <pedro.jose@gigigo.com>
+ @license MIT License, http://www.opensource.org/licenses/MIT
+
+ -->
+<dom-module id="gig-repeater-style">
+  <template>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: Roboto, sans-serif;
+      }
+
+      ::content .clone-content {
+        display: none
+      }
+
+      .panel {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        position: relative;
+      }
+
+      .panel-title {
+        padding: 20px 30px;
+        font-size: 18px;
+        color: #37474f;
+        display: block;
+        text-shadow: rgba(0,0,0,.15) 0 0 1px;
+      }
+
+      .panel-actions {
+        position:absolute;
+        top: 50%;
+        right: 30px;
+        z-index: 1;
+        margin: auto;
+        transform: translate(0,-50%);
+        -webkit-transform: translate(0,-50%);
+        -o-transform: translate(0,-50%);
+        -ms-transform: translate(0,-50%);
+      }
+
+      .panel-body {
+        padding: 30px 30px;
+        padding-top: 0;
+        position:relative;
+      }
+
+      .panel-heading {
+        position: relative;
+      }
+
+      .sortable-ghost {
+        display: block;
+        background-color: #f3f7f9;
+        border: 1px dashed #e4eaec;
+        margin-top: 20px;
+
+      }
+
+      .sortable-ghost > * {
+        visibility: hidden;
+      }
+    </style>
+  </template>
+</dom-module>

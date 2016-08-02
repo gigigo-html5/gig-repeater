@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="fragment" content="!">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Gig Component fieldMap Demo</title>
-    <link rel="import" href="/src/gig-repeater.html">
-    <link rel="import" href="/bower_components/gig-input/gig-input.html">
-    <link rel="import" href="/bower_components/gig-textarea/gig-textarea.html">
+  <meta charset="utf-8">
+  <meta name="fragment" content="!">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Gig Component Repeater Demo</title>
+  <link rel="import" href="../src/gig-repeater.html">
+  <link rel="import" href="../bower_components/gig-input/gig-input.html">
+  <link rel="import" href="../bower_components/gig-textarea/gig-textarea.html">
 
-    <style is="custom-style">
-        body {
-            margin: 0;
-            padding: 0;
-            background: #f1f4f5;
-        }
+  <style is="custom-style">
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f1f4f5;
+    }
 
-        .field {
-            padding: 10px;
-        }
+    .field {
+      padding: 10px;
+    }
 
-    </style>
+  </style>
 </head>
 <body>
-    <div class="field">
-        <gig-repeater name-regex="(elements\[[\w\d_-]+\]\[childs\]\[)(\d+)(\]\[[\w\d_-]+\]\[\w\w\])">
-            <div class="clone-content">
-                <div class="field">
-                    <p>Prueba</p>
-                    <gig-input name="elements[videoList][childs][0][youtubeId][es]" value="prueba"></gig-input>
-                </div>
-                <div class="field">
-                    <p>Prueba</p>
-                    <gig-textarea editor="true" name="elements[videoList][childs][0][textarea][es]" value="<b>prueba2</b>"></gig-textarea>
-                </div>
-                <div class="field">
-                    <p>Prueba</p>
-                    <gig-textarea  name="elements[videoList][childs][0][textarea2][es]" value="<b>prueba2</b>"></gig-textarea>
-                </div>
-            </div>
-        </gig-repeater>
-
+<div class="field">
+  <gig-repeater name-regex="(elements\[[\w\d_-]+\]\[childs\]\[)(\d+)(\]\[[\w\d_-]+\]\[\w\w\])">
+    <div class="clone-content">
+      <div class="field">
+        <p>Prueba</p>
+        <gig-input name="elements[videoList][childs][0][youtubeId][es]" value="prueba"></gig-input>
+      </div>
+      <div class="field">
+        <p>Prueba</p>
+        <gig-textarea editor="true" name="elements[videoList][childs][0][textarea][es]"
+                      value="<b>prueba2</b>"></gig-textarea>
+      </div>
+      <div class="field">
+        <p>Prueba</p>
+        <gig-textarea name="elements[videoList][childs][0][textarea2][es]" value="<b>prueba2</b>"></gig-textarea>
+      </div>
     </div>
-
+  </gig-repeater>
+</div>
 </body>
-
 </html>

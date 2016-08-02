@@ -1,6 +1,6 @@
 <!--
  Webcomponents to clone elements of form
- @version v0.0.3 - 2016-03-23
+ @version v0.0.3 - 2016-08-02
  @link https://github.com/gigigo-html5/gig-repeater
  @author Pedro José Peña Jerez <pedro.jose@gigigo.com>
  @license MIT License, http://www.opensource.org/licenses/MIT
@@ -10,210 +10,143 @@
 <link rel="import" href="../gig-button/gig-button.html">
 <link rel="import" href="gig-repeat-html.html">
 
+<link rel="import" href="gig-repeater-style.html">
+
 <dom-module id="gig-repeater">
+  <template>
+    <style include="gig-repeater-style"></style>
 
-    <style>
+    <content id="c" select=".clone-content"></content>
 
-        * {
-            box-sizing: border-box;
-            font-family: Roboto, sans-serif;
-        }
-
-        ::content .clone-content {
-            display: none
-        }
-
-        .panel {
-            background: white;
-            border-radius: 4px;
-            box-shadow: 0 1px 1px rgba(0,0,0,.05);
-            position: relative;
-        }
-
-        .panel-title {
-            padding: 20px 30px;
-            font-size: 18px;
-            color: #37474f;
-            display: block;
-            text-shadow: rgba(0,0,0,.15) 0 0 1px;
-        }
-
-        .panel-actions {
-            position:absolute;
-            top: 50%;
-            right: 30px;
-            z-index: 1;
-            margin: auto;
-            transform: translate(0,-50%);
-            -webkit-transform: translate(0,-50%);
-            -o-transform: translate(0,-50%);
-            -ms-transform: translate(0,-50%);
-        }
-
-        .panel-body {
-            padding: 30px 30px;
-            padding-top: 0;
-            position:relative;
-        }
-
-        .panel-heading {
-            position: relative;
-        }
-
-        .sortable-ghost {
-            display: block;
-            background-color: #f3f7f9;
-            border: 1px dashed #e4eaec;
-            margin-top: 20px;
-
-        }
-
-        .sortable-ghost > * {
-            visibility: hidden;
-        }
-
-    </style>
-
-    <template id="template">
-
-        <content id="c" select=".clone-content"></content>
-
-        <div class="panel-list" id="list">
-            <template is="dom-repeat" items="{{cloneElements}}" sort="{{_sort(sortVal)}}" on-dom-change="updateClone">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
-                        <div class="panel-actions">
-                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
-                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up" on-click="sortUpHandler"></gig-button>
-                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down" on-click="sortDownHandler"></gig-button>
-                            <gig-button class="btn-default btn-icon btn-pure" icon="fa-trash" on-click="deleteHandler"></gig-button>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <gig-repeat-html html="{{item.innerHTML}}" index="{{item.index}}" name-regex="{{nameRegex}}"></gig-repeat-html>
-                    </div>
-                </div>
-            </template>
+    <div class="panel-list" id="list">
+      <template is="dom-repeat" items="{{cloneElements}}" sort="{{_sort(sortVal)}}" on-dom-change="updateClone">
+        <div class="panel">
+          <div class="panel-heading">
+            <h3 class="panel-title"></h3>
+            <div class="panel-actions">
+              <gig-button class="btn-default btn-icon btn-pure" icon="fa-plus" on-click="cloneHandler"></gig-button>
+              <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-up" on-click="sortUpHandler"></gig-button>
+              <gig-button class="btn-default btn-icon btn-pure" icon="fa-chevron-down" on-click="sortDownHandler"></gig-button>
+              <gig-button class="btn-default btn-icon btn-pure" icon="fa-trash" on-click="deleteHandler"></gig-button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <gig-repeat-html html="{{item.innerHTML}}" index="{{item.index}}" name-regex="{{nameRegex}}"></gig-repeat-html>
+          </div>
         </div>
+      </template>
+    </div>
+  </template>
 
-    </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'gig-repeater',
+        ready: function() {
+          var self = this;
+          this.cloneElements = this.getInitialContent();
+        },
+        getInitialContent: function() {
+          var items = Polymer.dom(this.$.c).getDistributedNodes();
+          var array = [];
 
-    <script>
-        (function() {
+          for (var i = 0; i < items.length; i++) {
+            var object = items[i].cloneNode(true);
+            items[i].remove();
+            object.index = i;
+            array.push(object);
 
-            Polymer({
-                is: 'gig-repeater',
-                ready: function() {
-                    var self = this;
-                    this.cloneElements = this.getInitialContent();
+            var elements = Polymer.dom(items[i]).querySelectorAll('[name]');
 
-                },
-                getInitialContent: function() {
-                    var items = Polymer.dom(this.$.c).getDistributedNodes();
-                    var array = []
+            for (var x = 0; x < elements.length; x++) {
+              var elem = elements[x];
+              elem.setAttribute('disabled', true);
+            }
+          }
+          return array;
 
-                    for (var i = 0; i < items.length; i++) {
-                        var object = items[i].cloneNode(true);
-                        items[i].remove();
-                        object.index = i;
-                        array.push(object);
+        },
+        _sort: function(sortValue) {
+          return function(a, b) {
+            return a.index < b.index ? -1 : 1;
+          }
+        },
+        generateClone: function(index) {
+          var html = this.cloneElements[0].cloneNode(true);
 
-                        var elements = Polymer.dom(items[i]).querySelectorAll('[name]');
+          var elements = Polymer.dom(html).querySelectorAll('[name]');
+          for (var i = 0; i < elements.length; i++) {
+            var children = elements[i];
 
-                        for (var x = 0; x < elements.length; x++) {
-                            var elem = elements[x];
-                            elem.setAttribute('disabled',true);
-                        }
+            if (children.value) {
+              children.value = '';
+            }
+          }
+          html.index = index;
 
-                    }
+          return html;
+        },
+        updateClone: function() {
+          this.fire('clone', this.cloneElements[this.cloneElements.length - 1]);
+        },
+        cloneHandler: function() {
+          var index = this.cloneElements.length;
+          this.push('cloneElements', this.generateClone(index));
 
-                    return array;
+        },
+        deleteHandler: function(e) {
+          this.splice('cloneElements', e.model.index, 1);
+          this.updateIndex();
+        },
+        updateIndex: function() {
+          for (var i = 0; i < this.cloneElements.length; i++) {
 
-                },
-                _sort: function(sortValue) {
-                    return function(a, b) {
-                        return a.index < b.index ? -1 : 1;
-                    }
-                },
-                generateClone: function(index) {
-                    index = index;
-                    var html = this.cloneElements[0].cloneNode(true);
+            if (this.cloneElements[i]) {
+              var index = this.cloneElements[i].index;
+              this.set('cloneElements.' + i + '.index', i);
+            }
 
-                    var elements = Polymer.dom(html).querySelectorAll('[name]');
-                    for (var i = 0; i < elements.length; i++) {
-                        var children = elements[i];
+          }
+        },
+        sortUpHandler: function(e) {
+          var currentIndex = e.model.__data__.item.index;
+          var index = currentIndex - 1;
 
-                        if (children.value) {
-                            children.value = '';
-                        }
-                    }
-                    html.index = index;
+          if (index >= 0) {
+            this.set('cloneElements.' + currentIndex + '.index', index);
+            this.set('cloneElements.' + index + '.index', currentIndex);
+            this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
+          }
+        },
+        sortDownHandler: function(e) {
+          var currentIndex = e.model.__data__.item.index;
+          var index = currentIndex + 1;
 
+          if (index < this.cloneElements.length) {
+            this.set('cloneElements.' + currentIndex + '.index', index);
+            this.set('cloneElements.' + index + '.index', currentIndex);
 
-                    return html;
-                },
-                updateClone: function() {
-                    this.fire('clone', this.cloneElements[this.cloneElements.length -1]);
-                },
-                cloneHandler: function() {
-                    var index = this.cloneElements.length;
-                    this.push('cloneElements', this.generateClone(index));
+            this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
+          }
 
-                },
-                deleteHandler: function(e) {
-                    this.splice('cloneElements', e.model.index, 1);
-                    this.updateIndex();
-                },
-                updateIndex: function() {
-                    for (var i = 0; i < this.cloneElements.length; i++) {
-
-                        if (this.cloneElements[i]) {
-                            var index = this.cloneElements[i].index;
-                            this.set('cloneElements.'+i+'.index', i);
-                        }
-
-                    }
-                },
-                sortUpHandler: function(e) {
-                    var currentIndex = e.model.__data__.item.index;
-                    var index = currentIndex - 1;
-
-                    if (index >= 0) {
-                        this.set('cloneElements.'+currentIndex+'.index', index);
-                        this.set('cloneElements.'+index+'.index', currentIndex);
-                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
-                    }
-                },
-                sortDownHandler: function(e) {
-                    var currentIndex = e.model.__data__.item.index;
-                    var index = currentIndex + 1;
-
-                    if (index < this.cloneElements.length) {
-                        this.set('cloneElements.'+currentIndex+'.index', index);
-                        this.set('cloneElements.'+index+'.index', currentIndex);
-
-                        this.splice('cloneElements', index, 0, this.splice('cloneElements', currentIndex, 1)[0]);
-                    }
-
-                },
-                properties: {
-                    cloneElements: {
-                        type: Array,
-                        value: function() {
-                            return [];
-                        }
-                    },
-                    nameRegex: {
-                        type: String
-                    },
-                    sortVal: {
-                        type: Boolean,
-                        value: false
-                    }
-                }
-            })
-        })();
-    </script>
+        },
+        properties: {
+          cloneElements: {
+            type: Array,
+            value: function() {
+              return [];
+            }
+          },
+          nameRegex: {
+            type: String
+          },
+          sortVal: {
+            type: Boolean,
+            value: false
+          }
+        }
+      })
+    })();
+  </script>
 
 </dom-module>

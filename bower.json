@@ -14,7 +14,11 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "~1.2.0",
-    "gig-button": "~0.0.6"
+    "polymer": "~1.6.1",
+    "gig-button": "~0.1.7"
+  },
+  "devDependencies": {
+    "gig-input": "^0.2.7",
+    "gig-textarea": "^0.2.0"
   }
 }
