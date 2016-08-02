@@ -1,6 +1,6 @@
 <!--
  Webcomponents to clone elements of form
- @version v0.0.3 - 2016-03-23
+ @version v0.0.3 - 2016-08-02
  @link https://github.com/gigigo-html5/gig-repeater
  @author Pedro José Peña Jerez <pedro.jose@gigigo.com>
  @license MIT License, http://www.opensource.org/licenses/MIT
@@ -9,46 +9,46 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="gig-repeat-html">
-    <template><content></content></template>
-    <script>
+  <template>
+    <content></content>
+  </template>
+  <script>
     Polymer({
-        is: 'gig-repeat-html',
-        ready: function() {
-            this.htmlChanged();
-        },
-        htmlChanged: function() {
-            this.innerHTML = this.html;
-        },
-        attached: function() {
-            this.changeIndex()
-        },
-        changeIndex: function() {
-            var elements = this.querySelectorAll('[name]');
+      is: 'gig-repeat-html',
+      ready: function() {
+        this.htmlChanged();
+      },
+      htmlChanged: function() {
+        this.innerHTML = this.html;
+      },
+      attached: function() {
+        this.changeIndex()
+      },
+      changeIndex: function() {
+        var elements = this.querySelectorAll('[name]');
+        for (var i = 0; i < elements.length; i++) {
+          var children = elements[i];
 
-            for (var i = 0; i < elements.length; i++) {
-                var children = elements[i];
+          this.nameRegex = new RegExp(this.nameRegex);
+          children.setAttribute('name', children.getAttribute('name').replace(this.nameRegex, '$1' + this.index + '$3'));
 
-                this.nameRegex = new RegExp(this.nameRegex);
-                children.name = children.name.replace(this.nameRegex,'$1'+this.index+'$3');
-
-                if (children.editor) {
-                    children.editorReady();
-                }
-            }
-
-        },
-        properties: {
-            html: {
-                type: String,
-            },
-            index: {
-                type: Number,
-                value: 0,
-                reflectToAttribute: true,
-                notify: true,
-                observer: 'changeIndex'
-            }
+          if (children.editor) {
+            children.editorReady();
+          }
         }
-      });
-    </script>
+      },
+      properties: {
+        html: {
+          type: String
+        },
+        index: {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true,
+          notify: true,
+          observer: 'changeIndex'
+        }
+      }
+    });
+  </script>
 </dom-module>

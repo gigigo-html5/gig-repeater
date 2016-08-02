@@ -2,11 +2,19 @@
   "name": "gig-repeater",
   "version": "0.0.3",
   "description": "Webcomponents to clone elements of form",
-  "main": "gruntfile.js",
+  "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "./node_modules/.bin/gulp release",
-    "postinstall" : "./node_modules/.bin/bower install"
+    "test": "npm run lint-polymer",
+    "release": "gulp release",
+    "postinstall": "bower install",
+    "check-bower-deps": "ncu -m bower",
+    "check-npm-deps": "ncu",
+    "update-deps": "ncu -u && ncu -m bower -u",
+    "serve": "ws -p 3001",
+    "lint-polymer": "polylint --root src gig-repeater-style.html gig-repeater.html gig-repeat-html.html",
+    "release:patch": "gulp release && npm version patch --no-git-tag-version && git add -A && git commit -m \"chore(npm): update npm version\" && bower version patch -m \"chore(release): Bump to %s\" && git push --tags",
+    "release:minor": "gulp release && npm version minor --no-git-tag-version && git add -A && git commit -m \"chore(npm): update npm version\" && bower version minor -m \"chore(release): Bump to %s\" && git push --tags",
+    "release:major": "gulp release && npm version major --no-git-tag-version && git add -A && git commit -m \"chore(npm): update npm version\" && bower version major -m \"chore(release): Bump to %s\" && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -18,11 +26,15 @@
     "url": "https://github.com/gigigo-html5/gig-repeater/issues"
   },
   "devDependencies": {
-      "bower": "^1.7.7",
-      "dateformat": "^1.0.12",
-      "gulp": "^3.9.1",
-      "gulp-header": "^1.7.1",
-      "gulp-replace": "^0.5.4"
+    "bower": "^1.7.9",
+    "dateformat": "^1.0.12",
+    "gulp": "^3.9.1",
+    "gulp-header": "^1.8.7",
+    "gulp-replace": "^0.5.4",
+    "gulp-vulcanize": "^6.1.0",
+    "local-web-server": "^1.2.6",
+    "npm-check-updates": "^2.7.2",
+    "polylint": "^2.10.1"
   },
   "homepage": "https://github.com/gigigo-html5/gig-repeater",
   "dependencies": {

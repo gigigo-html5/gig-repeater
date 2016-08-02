@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 var replace = require('gulp-replace');
 var header = require('gulp-header');
@@ -14,7 +16,7 @@ var banner = ['<!--',
   ''].join('\n');
 
 gulp.task('release', function(){
-    return gulp.src(['src/*'])
+    return gulp.src(['src/*.html'])
         .pipe(replace('bower_components/', ''))
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest('./'));
